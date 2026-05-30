@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GuruDigital — Personal Web</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Marked.js untuk render Markdown -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1A365D">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: { DEFAULT:'#1A365D', 50:'#E8ECF4', 100:'#C5CEE3', 200:'#8B9DC7', 300:'#516CAB', 400:'#2D4A7A', 500:'#1A365D', 600:'#152C4D', 700:'#10213A', 800:'#0B1728', 900:'#060C16' },
+                        amber: { DEFAULT:'#D69E2E', 50:'#FDF8E8', 100:'#F9EDBE', 200:'#F5E093', 300:'#F0D369', 400:'#EBC63F', 500:'#D69E2E', 600:'#B07E20', 700:'#8A5F18', 800:'#644010', 900:'#3E2508' },
+                        offwhite: '#F7FAFC',
+                    },
+                    fontFamily: { inter:['Inter','sans-serif'], poppins:['Poppins','sans-serif'] }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        html{scroll-behavior:smooth}
+        body{font-family:'Inter',sans-serif;background:#F7FAFC;color:#1A202C}
+
+        ::-webkit-scrollbar{width:6px}
+        ::-webkit-scrollbar-track{background:#F7FAFC}
+        ::-webkit-scrollbar-thumb{background:#1A365D;border-radius:3px}
+
+        /* Scroll animation */
+        .fade-up{opacity:0;transform:translateY(30px);transition:opacity .6s ease,transform .6s ease}
+        .fade-up.visible{opacity:1;transform:translateY(0)}
+
+        /* Markdown rendered styles */
+        .md-body h1{font-size:1.75rem;font-weight:700;margin-bottom:.75rem;color:#1A365D;font-family:'Poppins',sans-serif}
+        .md-body h2{font-size:1.375rem;font-weight:600;margin-bottom:.625rem;color:#1A365D;font-family:'Poppins',sans-serif}
+        .md-body h3{font-size:1.125rem;font-weight:600;margin-bottom:.5rem;color:#2D4A7A;font-family:'Poppins',sans-serif}
+        .md-body p{margin-bottom:.875rem;line-height:1.75;color:#4A5568}
+        .md-body a{color:#D69E2E;text-decoration:underline}
+        .md-body a:hover{color:#B07E20}
+        .md-body ul{list-style:disc;padding-left:1.5rem;margin-bottom:.875rem;color:#4A5568}
+        .md-body ol{list-style:decimal;padding-left:1.5rem;margin-bottom:.875rem;color:#4A5568}
+        .md-body li{margin-bottom:.25rem;line-height:1.75}
+        .md-body code{background:#E2E8F0;padding:.125rem .375rem;border-radius:.25rem;font-size:.85em}
+        .md-body pre{background:#1A365D;color:#E2E8F0;padding:1rem;border-radius:.5rem;overflow-x:auto;margin-bottom:1rem}
+        .md-body pre code{background:none;padding:0;color:inherit}
+        .md-body blockquote{border-left:4px solid #D69E2E;padding-left:1rem;margin-bottom:1rem;color:#718096;font-style:italic}
+        .md-body img{max-width:100%;border-radius:.5rem;margin:.75rem 0}
+        .md-body hr{border:none;border-top:1px solid #E2E8F0;margin:1.25rem 0}
+
+        /* Skeleton loader */
+        @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+        .skel{background:linear-gradient(90deg,#E2E8F0 25%,#EDF2F7 50%,#E2E8F0 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:.5rem}
+
+        /* Toast */
+        .toast{position:fixed;bottom:1.5rem;right:1.5rem;padding:.875rem 1.25rem;border-radius:.75rem;color:#fff;font-size:.85rem;font-weight:500;z-index:9999;transform:translateY(100px);opacity:0;transition:all .3s ease}
+        .toast.show{transform:translateY(0);opacity:1}
+        .toast-ok{background:#38A169}.toast-err{background:#E53E3E}.toast-info{background:#1A365D}
+
+        /* Mobile menu */
+        .mob-menu{max-height:0;overflow:hidden;transition:max-height .3s ease}
+        .mob-menu.open{max-height:400px}
+
+        /* Card hover */
+        .card-h{transition:transform .3s ease,box-shadow .3s ease}
+        .card-h:hover{transform:translateY(-4px);box-shadow:0 20px 40px rgba(26,54,93,.1)}
+
+        .nav-link.active{color:#D69E2E!important}
+    </style>
+</head>
+
+<body class="font-inter bg-offwhite">
+
+<!-- ═══════════ NAVIGATION ═══════════ -->
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 transition-shadow duration-300">
+    <div class="max-w-6xl mx-auto px-6">
+        <div class="flex items-center justify-between h-16">
+            <a href="#beranda" class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-navy rounded-lg flex items-center justify-center">
+                    <span class="text-white font-poppins font-bold text-sm">G</span>
+                </div>
+                <span class="font-poppins font-bold text-navy text-lg">GuruDigital</span>
+            </a>
+            <div class="hidden md:flex items-center gap-1">
+                <a href="#beranda"   class="nav-link px-4 py-2 text-sm font-medium text-gray-600 hover:text-amber transition-colors rounded-lg hover:bg-amber-50">Beranda</a>
+                <a href="#profil"    class="nav-link px-4 py-2 text-sm font-medium text-gray-600 hover:text-amber transition-colors rounded-lg hover:bg-amber-50">Profil</a>
+                <a href="#portofolio" class="nav-link px-4 py-2 text-sm font-medium text-gray-600 hover:text-amber transition-colors rounded-lg hover:bg-amber-50">Portofolio</a>
+                <a href="#artikel"   class="nav-link px-4 py-2 text-sm font-medium text-gray-600 hover:text-amber transition-colors rounded-lg hover:bg-amber-50">Artikel</a>
+                <a href="#link"      class="nav-link px-4 py-2 text-sm font-medium text-gray-600 hover:text-amber transition-colors rounded-lg hover:bg-amber-50">Link</a>
+                <a href="#guide"     class="nav-link px-4 py-2 text-sm font-medium text-gray-600 hover:text-amber transition-colors rounded-lg hover:bg-amber-50">Guide</a>
+            </div>
+            <button id="menu-toggle" class="md:hidden p-2 rounded-lg hover:bg-gray-100" aria-label="Menu">
+                <svg class="w-6 h-6 text-navy" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+            </button>
+        </div>
+        <div id="mobile-menu" class="mob-menu md:hidden">
+            <div class="py-3 space-y-1 border-t border-gray-100">
+                <a href="#beranda"   class="mob-link block px-4 py-2.5 text-sm font-medium text-gray-600 hover:text-amber hover:bg-amber-50 rounded-lg">Beranda</a>
+                <a href="#profil"    class="mob-link block px-4 py-2.5 text-sm font-medium text-gray-600 hover:text-amber hover:bg-amber-50 rounded-lg">Profil</a>
+                <a href="#portofolio" class="mob-link block px-4 py-2.5 text-sm font-medium text-gray-600 hover:text-amber hover:bg-amber-50 rounded-lg">Portofolio</a>
+                <a href="#artikel"   class="mob-link block px-4 py-2.5 text-sm font-medium text-gray-600 hover:text-amber hover:bg-amber-50 rounded-lg">Artikel</a>
+                <a href="#link"      class="mob-link block px-4 py-2.5 text-sm font-medium text-gray-600 hover:text-amber hover:bg-amber-50 rounded-lg">Link</a>
+                <a href="#guide"     class="mob-link block px-4 py-2.5 text-sm font-medium text-gray-600 hover:text-amber hover:bg-amber-50 rounded-lg">Guide</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- ═══════════ BERANDA ═══════════ -->
+<section id="beranda" class="min-h-screen flex items-center pt-16 bg-gradient-to-br from-offwhite via-white to-amber-50">
+    <div class="max-w-6xl mx-auto px-6 py-20">
+        <div class="grid md:grid-cols-2 gap-12 items-center">
+            <div class="fade-up">
+                <div class="inline-flex items-center gap-2 bg-amber-100 text-amber-700 px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-widest mb-6">
+                    <span class="w-2 h-2 bg-amber-500 rounded-full animate-pulse"></span>
+                    JAMstack Personal Web
+                </div>
+                <h1 class="font-poppins text-4xl md:text-5xl lg:text-6xl font-bold text-navy leading-tight mb-6">
+                    Selamat Datang di<br><span class="text-amber">GuruDigital</span>
+                </h1>
+                <p class="text-gray-500 text-lg leading-relaxed mb-8 max-w-lg">
+                    Berbagi pengetahuan dan inspirasi melalui tulisan. Konten dikelola langsung dari <strong class="text-navy">Google Spreadsheet</strong> — tanpa backend, tanpa database.
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <a href="#artikel" class="inline-flex items-center gap-2 bg-navy text-white px-6 py-3 rounded-xl font-medium text-sm hover:bg-navy-400 transition-all hover:shadow-lg hover:shadow-navy/20">
+                        Baca Artikel
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                    </a>
+                    <a href="#profil" class="inline-flex items-center gap-2 border-2 border-navy/20 text-navy px-6 py-3 rounded-xl font-medium text-sm hover:border-navy hover:bg-navy/5 transition-all">
+                        Tentang Saya
+                    </a>
+                </div>
+            </div>
+            <div class="relative flex justify-center fade-up">
+                <div class="relative w-72 h-72 md:w-96 md:h-96">
+                    <div class="absolute inset-0 bg-amber/20 rounded-3xl rotate-6"></div>
+                    <div class="absolute inset-0 bg-navy/10 rounded-3xl -rotate-3"></div>
+                    <div class="relative w-full h-full rounded-3xl overflow-hidden bg-gradient-to-br from-navy to-navy-400 flex items-center justify-center">
+                        <div class="text-center text-white p-8">
+                            <div class="w-20 h-20 mx-auto mb-4 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm">
+                                <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+                            </div>
+                            <p class="font-poppins font-semibold text-lg">Your Name</p>
+                            <p class="text-white/70 text-sm mt-1">Digital Educator</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════ PROFIL ═══════════ -->
+<section id="profil" class="py-24 bg-white">
+    <div class="max-w-6xl mx-auto px-6">
+        <div class="fade-up text-center mb-16">
+            <span class="text-amber font-semibold text-xs uppercase tracking-[0.2em]">Tentang Saya</span>
+            <h2 class="font-poppins text-3xl md:text-4xl font-bold text-navy mt-3">Profil</h2>
+            <div class="w-16 h-1 bg-amber mx-auto mt-4 rounded-full"></div>
+        </div>
+        <div class="grid md:grid-cols-5 gap-12 items-start">
+            <div class="md:col-span-2 fade-up">
+                <div class="bg-gradient-to-br from-navy to-navy-400 rounded-2xl p-8 text-white text-center sticky top-24">
+                    <div class="w-24 h-24 mx-auto bg-white/20 rounded-2xl flex items-center justify-center mb-4 backdrop-blur-sm">
+                        <svg class="w-12 h-12" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+                    </div>
+                    <h3 class="font-poppins font-bold text-xl">Nama Anda</h3>
+                    <p class="text-white/70 text-sm mt-1">Digital Educator &amp; Writer</p>
+                    <div class="mt-6 pt-6 border-t border-white/20 space-y-3 text-left text-sm">
+                        <div class="flex items-center gap-3">
+                            <svg class="w-4 h-4 text-amber shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                            <span class="text-white/80">Indonesia</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <svg class="w-4 h-4 text-amber shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                            <span class="text-white/80">email@example.com</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <svg class="w-4 h-4 text-amber shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
+                            <span class="text-white/80">gurudigital.id</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="md:col-span-3 fade-up space-y-6">
+                <h3 class="font-poppins text-2xl font-bold text-navy">Halo! 👋</h3>
+                <p class="text-gray-600 leading-relaxed">
+                    Saya adalah seorang pendidik digital yang bersemangat dalam memanfaatkan teknologi untuk meningkatkan kualitas pembelajaran. Melalui platform ini, saya berbagi artikel, tutorial, dan panduan.
+                </p>
+                <p class="text-gray-600 leading-relaxed">
+                    Situs ini dibangun dengan pendekatan <strong class="text-navy">JAMstack</strong> — konten dikelola melalui Google Spreadsheet, diproses di sisi klien dengan JavaScript, dan ditampilkan secara statis. Tidak ada server, tidak ada database — hanya file, spreadsheet, dan CDN.
+                </p>
+                <div class="grid grid-cols-2 gap-4 mt-8">
+                    <div class="bg-offwhite rounded-xl p-5 text-center">
+                        <div class="text-3xl font-poppins font-bold text-navy">50+</div>
+                        <div class="text-gray-500 text-sm mt-1">Artikel</div>
+                    </div>
+                    <div class="bg-offwhite rounded-xl p-5 text-center">
+                        <div class="text-3xl font-poppins font-bold text-navy">5+</div>
+                        <div class="text-gray-500 text-sm mt-1">Tahun Pengalaman</div>
+                    </div>
+                    <div class="bg-offwhite rounded-xl p-5 text-center">
+                        <div class="text-3xl font-poppins font-bold text-navy">1K+</div>
+                        <div class="text-gray-500 text-sm mt-1">Pembaca</div>
+                    </div>
+                    <div class="bg-offwhite rounded-xl p-5 text-center">
+                        <div class="text-3xl font-poppins font-bold text-navy">10+</div>
+                        <div class="text-gray-500 text-sm mt-1">Proyek</div>
+                    </div>
+                </div>
+                <div class="mt-8">
+                    <h4 class="font-poppins font-semibold text-navy mb-3">Keahlian</h4>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1.5 bg-navy/10 text-navy text-xs font-medium rounded-lg">HTML &amp; CSS</span>
+                        <span class="px-3 py-1.5 bg-navy/10 text-navy text-xs font-medium rounded-lg">JavaScript</span>
+                        <span class="px-3 py-1.5 bg-navy/10 text-navy text-xs font-medium rounded-lg">Google Apps Script</span>
+                        <span class="px-3 py-1.5 bg-amber-100 text-amber text-xs font-medium rounded-lg">JAMstack</span>
+                        <span class="px-3 py-1.5 bg-amber-100 text-amber text-xs font-medium rounded-lg">PWA</span>
+                        <span class="px-3 py-1.5 bg-navy/10 text-navy text-xs font-medium rounded-lg">Markdown</span>
+                        <span class="px-3 py-1.5 bg-navy/10 text-navy text-xs font-medium rounded-lg">Pendidikan Digital</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════ PORTOFOLIO ═══════════ -->
+<section id="portofolio" class="py-24 bg-offwhite">
+    <div class="max-w-6xl mx-auto px-6">
+        <div class="fade-up text-center mb-16">
+            <span class="text-amber font-semibold text-xs uppercase tracking-[0.2em]">Karya</span>
+            <h2 class="font-poppins text-3xl md:text-4xl font-bold text-navy mt-3">Portofolio</h2>
+            <div class="w-16 h-1 bg-amber mx-auto mt-4 rounded-full"></div>
+        </div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="fade-up card-h bg-white rounded-2xl overflow-hidden border border-gray-100">
+                <div class="h-48 bg-gradient-to-br from-navy to-navy-300 flex items-center justify-center">
+                    <svg class="w-12 h-12 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                </div>
+                <div class="p-6">
+                    <span class="px-2.5 py-0.5 bg-amber-100 text-amber text-[10px] font-semibold uppercase tracking-wider rounded">Web App</span>
+                    <h3 class="font-poppins font-semibold text-navy text-lg mt-3 mb-2">Portal Pembelajaran</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed">Platform e-learning dengan fitur interaktif dan manajemen kursus berbasis web.</p>
+                </div>
+            </div>
+            <div class="fade-up card-h bg-white rounded-2xl overflow-hidden border border-gray-100">
+                <div class="h-48 bg-gradient-to-br from-amber to-amber-300 flex items-center justify-center">
+                    <svg class="w-12 h-12 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                </div>
+                <div class="p-6">
+                    <span class="px-2.5 py-0.5 bg-navy/10 text-navy text-[10px] font-semibold uppercase tracking-wider rounded">Mobile</span>
+                    <h3 class="font-poppins font-semibold text-navy text-lg mt-3 mb-2">EduTrack App</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed">Aplikasi pelacak progress belajar dengan notifikasi dan visualisasi data.</p>
+                </div>
+            </div>
+            <div class="fade-up card-h bg-white rounded-2xl overflow-hidden border border-gray-100">
+                <div class="h-48 bg-gradient-to-br from-gray-700 to-gray-500 flex items-center justify-center">
+                    <svg class="w-12 h-12 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+                </div>
+                <div class="p-6">
+                    <span class="px-2.5 py-0.5 bg-amber-100 text-amber text-[10px] font-semibold uppercase tracking-wider rounded">JAMstack</span>
+                    <h3 class="font-poppins font-semibold text-navy text-lg mt-3 mb-2">Blog Generator</h3>
+                    <p class="text-gray-500 text-sm leading-relaxed">Generator blog statis dari Google Sheet, dengan PWA dan Markdown support.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════ ARTIKEL ═══════════ -->
+<section id="artikel" class="py-24 bg-white">
+    <div class="max-w-6xl mx-auto px-6">
+        <div class="fade-up text-center mb-16">
+            <span class="text-amber font-semibold text-xs uppercase tracking-[0.2em]">Blog</span>
+            <h2 class="font-poppins text-3xl md:text-4xl font-bold text-navy mt-3">Artikel</h2>
+            <div class="w-16 h-1 bg-amber mx-auto mt-4 rounded-full"></div>
+            <p class="text-gray-500 mt-4 max-w-xl mx-auto">Konten diambil langsung dari Google Spreadsheet. Tulis di Sheet, tampil di web.</p>
+        </div>
+
+        <div class="fade-up flex flex-wrap items-center gap-4 mb-8">
+            <button id="btn-reload" class="inline-flex items-center gap-2 bg-navy text-white px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-navy-400 transition-all">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                Muat Ulang
+            </button>
+            <span id="status-text" class="text-sm text-gray-400"></span>
+        </div>
+
+        <div id="posts-container">
+            <div class="grid md:grid-cols-2 gap-6" id="skeleton-loader">
+                <div class="bg-offwhite rounded-2xl p-6 space-y-4"><div class="skel h-4 w-1/3"></div><div class="skel h-6 w-3/4"></div><div class="space-y-2"><div class="skel h-3 w-full"></div><div class="skel h-3 w-5/6"></div><div class="skel h-3 w-4/6"></div></div></div>
+                <div class="bg-offwhite rounded-2xl p-6 space-y-4"><div class="skel h-4 w-1/4"></div><div class="skel h-6 w-2/3"></div><div class="space-y-2"><div class="skel h-3 w-full"></div><div class="skel h-3 w-4/5"></div><div class="skel h-3 w-3/5"></div></div></div>
+            </div>
+        </div>
+
+        <div id="error-state" class="hidden text-center py-16">
+            <div class="w-16 h-16 mx-auto mb-4 bg-red-50 rounded-2xl flex items-center justify-center">
+                <svg class="w-8 h-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
+            </div>
+            <h3 class="font-poppins font-semibold text-navy text-lg">Gagal Memuat Artikel</h3>
+            <p id="error-message" class="text-gray-500 text-sm mt-2"></p>
+            <button onclick="fetchPosts()" class="mt-4 inline-flex items-center gap-2 bg-navy text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-navy-400 transition-all">Coba Lagi</button>
+        </div>
+
+        <div id="empty-state" class="hidden text-center py-16">
+            <div class="w-16 h-16 mx-auto mb-4 bg-amber-50 rounded-2xl flex items-center justify-center">
+                <svg class="w-8 h-8 text-amber" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            </div>
+            <h3 class="font-poppins font-semibold text-navy text-lg">Belum Ada Artikel</h3>
+            <p class="text-gray-500 text-sm mt-2">Mulai tulis konten di Google Spreadsheet Anda.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════ LINK EKSTERNAL ═══════════ -->
+<section id="link" class="py-24 bg-offwhite">
+    <div class="max-w-6xl mx-auto px-6">
+        <div class="fade-up text-center mb-16">
+            <span class="text-amber font-semibold text-xs uppercase tracking-[0.2em]">Koneksi</span>
+            <h2 class="font-poppins text-3xl md:text-4xl font-bold text-navy mt-3">Link Eksternal</h2>
+            <div class="w-16 h-1 bg-amber mx-auto mt-4 rounded-full"></div>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-3xl mx-auto">
+            <a href="https://github.com" target="_blank" rel="noopener" class="fade-up card-h flex items-center gap-4 bg-white p-5 rounded-2xl border border-gray-100 group">
+                <div class="w-12 h-12 bg-gray-900 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                </div>
+                <div><div class="font-poppins font-semibold text-navy text-sm">GitHub</div><div class="text-gray-400 text-xs">Repositori &amp; Kode</div></div>
+            </a>
+            <a href="https://linkedin.com" target="_blank" rel="noopener" class="fade-up card-h flex items-center gap-4 bg-white p-5 rounded-2xl border border-gray-100 group">
+                <div class="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                </div>
+                <div><div class="font-poppins font-semibold text-navy text-sm">LinkedIn</div><div class="text-gray-400 text-xs">Profil Profesional</div></div>
+            </a>
+            <a href="https://twitter.com" target="_blank" rel="noopener" class="fade-up card-h flex items-center gap-4 bg-white p-5 rounded-2xl border border-gray-100 group">
+                <div class="w-12 h-12 bg-sky-500 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                </div>
+                <div><div class="font-poppins font-semibold text-navy text-sm">X / Twitter</div><div class="text-gray-400 text-xs">Microblogging</div></div>
+            </a>
+            <a href="https://youtube.com" target="_blank" rel="noopener" class="fade-up card-h flex items-center gap-4 bg-white p-5 rounded-2xl border border-gray-100 group">
+                <div class="w-12 h-12 bg-red-600 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                </div>
+                <div><div class="font-poppins font-semibold text-navy text-sm">YouTube</div><div class="text-gray-400 text-xs">Video Tutorial</div></div>
+            </a>
+            <a href="https://medium.com" target="_blank" rel="noopener" class="fade-up card-h flex items-center gap-4 bg-white p-5 rounded-2xl border border-gray-100 group">
+                <div class="w-12 h-12 bg-gray-800 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/></svg>
+                </div>
+                <div><div class="font-poppins font-semibold text-navy text-sm">Medium</div><div class="text-gray-400 text-xs">Long-form Writing</div></div>
+            </a>
+            <a href="mailto:email@example.com" class="fade-up card-h flex items-center gap-4 bg-white p-5 rounded-2xl border border-gray-100 group">
+                <div class="w-12 h-12 bg-amber rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                </div>
+                <div><div class="font-poppins font-semibold text-navy text-sm">Email</div><div class="text-gray-400 text-xs">Hubungi Langsung</div></div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════ GUIDE ═══════════ -->
+<section id="guide" class="py-24 bg-white">
+    <div class="max-w-6xl mx-auto px-6">
+        <div class="fade-up text-center mb-16">
+            <span class="text-amber font-semibold text-xs uppercase tracking-[0.2em]">Referensi</span>
+            <h2 class="font-poppins text-3xl md:text-4xl font-bold text-navy mt-3">Guide Markdown</h2>
+            <div class="w-16 h-1 bg-amber mx-auto mt-4 rounded-full"></div>
+            <p class="text-gray-500 mt-4 max-w-xl mx-auto">Gunakan sintaks Markdown di kolom <strong class="text-navy">KontenMarkdown</strong> pada Google Spreadsheet untuk memformat artikel Anda.</p>
+        </div>
+        <div class="fade-up max-w-3xl mx-auto">
+            <div class="bg-offwhite rounded-2xl overflow-hidden border border-gray-100">
+                <div class="bg-navy px-6 py-4 flex items-center gap-3">
+                    <div class="flex gap-1.5">
+                        <div class="w-3 h-3 rounded-full bg-red-400"></div>
+                        <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
+                        <div class="w-3 h-3 rounded-full bg-green-400"></div>
+                    </div>
+                    <span class="text-white/60 text-xs font-medium">Markdown Reference</span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="border-b border-gray-200">
+                                <th class="text-left px-6 py-3.5 font-poppins font-semibold text-navy text-xs uppercase tracking-wider">Elemen</th>
+                                <th class="text-left px-6 py-3.5 font-poppins font-semibold text-navy text-xs uppercase tracking-wider">Sintaks Markdown</th>
+                                <th class="text-left px-6 py-3.5 font-poppins font-semibold text-navy text-xs uppercase tracking-wider">Hasil</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-gray-600">
+                            <tr class="border-b border-gray-100 hover:bg-white transition-colors">
+                                <td class="px-6 py-3.5 font-medium text-navy">Heading</td>
+                                <td class="px-6 py-3.5"><code class="bg-navy/10 text-navy px-2 py-0.5 rounded text-xs"># Judul</code></td>
+                                <td class="px-6 py-3.5 font-bold text-lg">Judul</td>
+                            </tr>
+                            <tr class="border-b border-gray-100 hover:bg-white transition-colors">
+                                <td class="px-6 py-3.5 font-medium text-navy">Bold</td>
+                                <td class="px-6 py-3.5"><code class="bg-navy/10 text-navy px-2 py-0.5 rounded text-xs">**teks tebal**</code></td>
+                                <td class="px-6 py-3.5"><strong>teks tebal</strong></td>
+                            </tr>
+                            <tr class="border-b border-gray-100 hover:bg-white transition-colors">
+                                <td class="px-6 py-3.5 font-medium text-navy">Italic</td>
+                                <td class="px-6 py-3.5"><code class="bg-navy/10 text-navy px-2 py-0.5 rounded text-xs">*teks miring*</code></td>
+                                <td class="px-6 py-3.5"><em>teks miring</em></td>
+                            </tr>
+                            <tr class="border-b border-gray-100 hover:bg-white transition-colors">
+                                <td class="px-6 py-3.5 font-medium text-navy">Link</td>
+                                <td class="px-6 py-3.5"><code class="bg-navy/10 text-navy px-2 py-0.5 rounded text-xs">[teks](url)</code></td>
+                                <td class="px-6 py-3.5"><a href="#" class="text-amber underline" onclick="event.preventDefault()">teks</a></td>
+                            </tr>
+                            <tr class="border-b border-gray-100 hover:bg-white transition-colors">
+                                <td class="px-6 py-3.5 font-medium text-navy">Image</td>
+                                <td class="px-6 py-3.5"><code class="bg-navy/10 text-navy px-2 py-0.5 rounded text-xs">![alt](url)</code></td>
+                                <td class="px-6 py-3.5 text-gray-400 text-xs">🖼️ Gambar tampil di artikel</td>
+                            </tr>
+                            <tr class="hover:bg-white transition-colors">
+                                <td class="px-6 py-3.5 font-medium text-navy">Code</td>
+                                <td class="px-6 py-3.5"><code class="bg-navy/10 text-navy px-2 py-0.5 rounded text-xs">`kode`</code></td>
+                                <td class="px-6 py-3.5"><code class="bg-navy/10 text-navy px-1.5 py-0.5 rounded text-xs">kode</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Spreadsheet structure guide -->
+            <div class="mt-8 bg-amber-50 border border-amber-200 rounded-2xl p-6">
+                <div class="flex items-start gap-3">
+                    <div class="w-8 h-8 bg-amber-200 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
+                        <svg class="w-4 h-4 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </div>
+                    <div>
+                        <h4 class="font-poppins font-semibold text-navy text-sm mb-2">Struktur Google Spreadsheet</h4>
+                        <p class="text-gray-600 text-sm leading-relaxed mb-3">Buat spreadsheet dengan header kolom berikut (baris pertama):</p>
+                        <div class="bg-white rounded-xl p-4 overflow-x-auto">
+                            <table class="w-full text-xs">
+                                <thead><tr>
+                                    <th class="text-left px-3 py-2 bg-navy text-white rounded-tl-lg font-semibold">Judul</th>
+                                    <th class="text-left px-3 py-2 bg-navy text-white font-semibold">Tanggal</th>
+                                    <th class="text-left px-3 py-2 bg-navy text-white font-semibold">Kategori</th>
+                                    <th class="text-left px-3 py-2 bg-navy text-white rounded-tr-lg font-semibold">KontenMarkdown</th>
+                                </tr></thead>
+                                <tbody class="text-gray-600"><tr class="border-b border-gray-100">
+                                    <td class="px-3 py-2 font-medium">Belajar JAMstack</td>
+                                    <td class="px-3 py-2">2024-01-15</td>
+                                    <td class="px-3 py-2">Tutorial</td>
+                                    <td class="px-3 py-2 text-amber font-mono"># JAMstack… **
