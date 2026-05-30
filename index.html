@@ -1,469 +1,1200 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GuruDigital — Personal Web</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GuruDigital — Edukator & Developer</title>
+  <meta name="description" content="Website personal GuruDigital: portofolio, artikel, dan panduan digital.">
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1A365D">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
 
-    <!-- Marked.js untuk render Markdown -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#1A365D">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <!-- Marked.js untuk render Markdown -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
-    <!-- Tailwind Config -->
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        navy: { DEFAULT:'#1A365D', 50:'#E8ECF4', 100:'#C5CEE3', 200:'#8B9DC7', 300:'#516CAB', 400:'#2D4A7A', 500:'#1A365D', 600:'#152C4D', 700:'#10213A', 800:'#0B1728', 900:'#060C16' },
-                        amber: { DEFAULT:'#D69E2E', 50:'#FDF8E8', 100:'#F9EDBE', 200:'#F5E093', 300:'#F0D369', 400:'#EBC63F', 500:'#D69E2E', 600:'#B07E20', 700:'#8A5F18', 800:'#644010', 900:'#3E2508' },
-                        offwhite: '#F7FAFC',
-                    },
-                    fontFamily: { inter:['Inter','sans-serif'], poppins:['Poppins','sans-serif'] }
-                }
-            }
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: { DEFAULT: '#1A365D', dark: '#0F2440', light: '#2A4A7F' },
+            offwhite: '#F7FAFC',
+            amber: { DEFAULT: '#D69E2E', light: '#E8B84A', dark: '#B8860B' },
+            slate: { 50: '#F7FAFC', 100: '#EDF2F7', 200: '#E2E8F0', 300: '#CBD5E0', 400: '#A0AEC0', 500: '#718096', 600: '#4A5568', 700: '#2D3748', 800: '#1A202C' }
+          },
+          fontFamily: {
+            heading: ['Poppins', 'sans-serif'],
+            body: ['Inter', 'sans-serif'],
+          }
         }
-    </script>
+      }
+    }
+  </script>
 
-    <style>
-        *{margin:0;padding:0;box-sizing:border-box}
-        html{scroll-behavior:smooth}
-        body{font-family:'Inter',sans-serif;background:#F7FAFC;color:#1A202C}
+  <style>
+    /* ===== CSS VARIABLES ===== */
+    :root {
+      --bg: #F7FAFC;
+      --fg: #1A202C;
+      --primary: #1A365D;
+      --primary-dark: #0F2440;
+      --accent: #D69E2E;
+      --accent-light: #E8B84A;
+      --card: #FFFFFF;
+      --muted: #718096;
+      --border: #E2E8F0;
+    }
 
-        ::-webkit-scrollbar{width:6px}
-        ::-webkit-scrollbar-track{background:#F7FAFC}
-        ::-webkit-scrollbar-thumb{background:#1A365D;border-radius:3px}
+    /* ===== BASE ===== */
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      overflow-x: hidden;
+    }
+    h1, h2, h3, h4, h5, h6 { font-family: 'Poppins', sans-serif; }
 
-        /* Scroll animation */
-        .fade-up{opacity:0;transform:translateY(30px);transition:opacity .6s ease,transform .6s ease}
-        .fade-up.visible{opacity:1;transform:translateY(0)}
+    section { scroll-margin-top: 80px; }
 
-        /* Markdown rendered styles */
-        .md-body h1{font-size:1.75rem;font-weight:700;margin-bottom:.75rem;color:#1A365D;font-family:'Poppins',sans-serif}
-        .md-body h2{font-size:1.375rem;font-weight:600;margin-bottom:.625rem;color:#1A365D;font-family:'Poppins',sans-serif}
-        .md-body h3{font-size:1.125rem;font-weight:600;margin-bottom:.5rem;color:#2D4A7A;font-family:'Poppins',sans-serif}
-        .md-body p{margin-bottom:.875rem;line-height:1.75;color:#4A5568}
-        .md-body a{color:#D69E2E;text-decoration:underline}
-        .md-body a:hover{color:#B07E20}
-        .md-body ul{list-style:disc;padding-left:1.5rem;margin-bottom:.875rem;color:#4A5568}
-        .md-body ol{list-style:decimal;padding-left:1.5rem;margin-bottom:.875rem;color:#4A5568}
-        .md-body li{margin-bottom:.25rem;line-height:1.75}
-        .md-body code{background:#E2E8F0;padding:.125rem .375rem;border-radius:.25rem;font-size:.85em}
-        .md-body pre{background:#1A365D;color:#E2E8F0;padding:1rem;border-radius:.5rem;overflow-x:auto;margin-bottom:1rem}
-        .md-body pre code{background:none;padding:0;color:inherit}
-        .md-body blockquote{border-left:4px solid #D69E2E;padding-left:1rem;margin-bottom:1rem;color:#718096;font-style:italic}
-        .md-body img{max-width:100%;border-radius:.5rem;margin:.75rem 0}
-        .md-body hr{border:none;border-top:1px solid #E2E8F0;margin:1.25rem 0}
+    /* ===== SCROLL PROGRESS BAR ===== */
+    #scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-light));
+      z-index: 9999;
+      width: 0%;
+      transition: width 0.1s linear;
+    }
 
-        /* Skeleton loader */
-        @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
-        .skel{background:linear-gradient(90deg,#E2E8F0 25%,#EDF2F7 50%,#E2E8F0 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:.5rem}
+    /* ===== NAVBAR ===== */
+    #navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      transition: background 0.3s ease, box-shadow 0.3s ease, backdrop-filter 0.3s ease;
+    }
+    #navbar.scrolled {
+      background: rgba(15, 36, 64, 0.95);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+    .nav-link {
+      position: relative;
+      color: rgba(255,255,255,0.75);
+      font-weight: 500;
+      font-size: 0.875rem;
+      letter-spacing: 0.025em;
+      transition: color 0.3s ease;
+      padding: 0.25rem 0;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--accent);
+      transition: width 0.3s ease;
+    }
+    .nav-link:hover, .nav-link.active { color: #fff; }
+    .nav-link:hover::after, .nav-link.active::after { width: 100%; }
 
-        /* Toast */
-        .toast{position:fixed;bottom:1.5rem;right:1.5rem;padding:.875rem 1.25rem;border-radius:.75rem;color:#fff;font-size:.85rem;font-weight:500;z-index:9999;transform:translateY(100px);opacity:0;transition:all .3s ease}
-        .toast.show{transform:translateY(0);opacity:1}
-        .toast-ok{background:#38A169}.toast-err{background:#E53E3E}.toast-info{background:#1A365D}
+    /* Hamburger */
+    #menu-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+    }
+    #menu-toggle span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: #fff;
+      border-radius: 2px;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    #menu-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    #menu-toggle.open span:nth-child(2) { opacity: 0; }
+    #menu-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-        /* Mobile menu */
-        .mob-menu{max-height:0;overflow:hidden;transition:max-height .3s ease}
-        .mob-menu.open{max-height:400px}
+    #nav-menu {
+      transition: max-height 0.4s ease, opacity 0.3s ease;
+    }
 
-        /* Card hover */
-        .card-h{transition:transform .3s ease,box-shadow .3s ease}
-        .card-h:hover{transform:translateY(-4px);box-shadow:0 20px 40px rgba(26,54,93,.1)}
+    @media (max-width: 768px) {
+      #menu-toggle { display: flex; }
+      #nav-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(15, 36, 64, 0.98);
+        backdrop-filter: blur(12px);
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        flex-direction: column;
+        padding: 0;
+      }
+      #nav-menu.open {
+        max-height: 400px;
+        opacity: 1;
+        padding: 1rem 0;
+      }
+      #nav-menu li { padding: 0.5rem 1.5rem; }
+    }
 
-        .nav-link.active{color:#D69E2E!important}
-    </style>
+    /* ===== HERO ===== */
+    #beranda {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(ellipse at 25% 50%, rgba(214,158,46,0.08) 0%, transparent 55%),
+        radial-gradient(ellipse at 75% 30%, rgba(42,74,127,0.15) 0%, transparent 55%),
+        linear-gradient(175deg, #0F2440 0%, #1A365D 50%, #2A4A7F 100%);
+      overflow: hidden;
+    }
+
+    /* Dot grid pattern */
+    #beranda::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+    }
+
+    /* Floating shapes */
+    .hero-shape {
+      position: absolute;
+      pointer-events: none;
+      will-change: transform;
+    }
+    .hs-1 {
+      width: 90px; height: 90px;
+      border: 2px solid rgba(214,158,46,0.25);
+      border-radius: 50%;
+      top: 18%; left: 8%;
+      animation: floatA 7s ease-in-out infinite;
+    }
+    .hs-2 {
+      width: 60px; height: 60px;
+      background: rgba(214,158,46,0.1);
+      border-radius: 12px;
+      top: 25%; right: 12%;
+      animation: floatB 8s ease-in-out infinite 1s;
+    }
+    .hs-3 {
+      width: 120px; height: 120px;
+      border: 2px solid rgba(255,255,255,0.08);
+      border-radius: 50%;
+      bottom: 20%; left: 15%;
+      animation: floatA 9s ease-in-out infinite 2s;
+    }
+    .hs-4 {
+      width: 40px; height: 40px;
+      background: rgba(214,158,46,0.15);
+      border-radius: 50%;
+      top: 60%; right: 20%;
+      animation: floatB 6s ease-in-out infinite 0.5s;
+    }
+    .hs-5 {
+      width: 70px; height: 70px;
+      border: 2px solid rgba(214,158,46,0.15);
+      border-radius: 16px;
+      bottom: 30%; right: 8%;
+      animation: floatA 10s ease-in-out infinite 3s;
+    }
+
+    @keyframes floatA {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-25px) rotate(8deg); }
+    }
+    @keyframes floatB {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(20px) rotate(-6deg); }
+    }
+
+    /* Scroll indicator */
+    .scroll-indicator {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: bounceDown 2s ease-in-out infinite;
+    }
+    @keyframes bounceDown {
+      0%, 100% { transform: translateX(-50%) translateY(0); opacity: 1; }
+      50% { transform: translateX(-50%) translateY(10px); opacity: 0.5; }
+    }
+
+    /* ===== SECTION HEADERS ===== */
+    .section-title {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 800;
+      font-size: 2.25rem;
+      color: var(--primary);
+      position: relative;
+      display: inline-block;
+      margin-bottom: 0.5rem;
+    }
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 0;
+      width: 48px;
+      height: 4px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+
+    /* ===== SCROLL REVEAL ===== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* ===== CARD HOVER ===== */
+    .card-hover {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card-hover:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 32px rgba(26,54,93,0.12);
+    }
+
+    /* ===== SKELETON LOADING ===== */
+    .skeleton {
+      background: linear-gradient(90deg, #E2E8F0 25%, #EDF2F7 50%, #E2E8F0 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: 6px;
+    }
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    /* ===== ARTICLE CARD ===== */
+    .article-card {
+      border-left: 4px solid var(--accent);
+      background: var(--card);
+      border-radius: 0 12px 12px 0;
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 2px 12px rgba(26,54,93,0.06);
+      transition: box-shadow 0.3s ease, transform 0.3s ease;
+    }
+    .article-card:hover {
+      box-shadow: 0 8px 24px rgba(26,54,93,0.1);
+      transform: translateX(4px);
+    }
+    .article-card h3 {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: var(--primary);
+      margin-bottom: 0.35rem;
+    }
+    .article-card .article-date {
+      font-size: 0.8rem;
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      display: inline-block;
+    }
+    .article-card .article-body {
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 0.95rem;
+    }
+    .article-card .article-body h1,
+    .article-card .article-body h2,
+    .article-card .article-body h3 {
+      color: var(--primary);
+      margin-top: 1rem;
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+    }
+    .article-card .article-body p { margin-bottom: 0.75rem; }
+    .article-card .article-body a {
+      color: var(--accent);
+      text-decoration: underline;
+    }
+    .article-card .article-body img {
+      max-width: 100%;
+      border-radius: 8px;
+      margin: 0.75rem 0;
+    }
+    .article-card .article-body code {
+      background: #EDF2F7;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+    }
+    .article-card .article-body ul,
+    .article-card .article-body ol {
+      padding-left: 1.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    /* ===== GUIDE TABLE ===== */
+    .guide-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 16px rgba(26,54,93,0.08);
+    }
+    .guide-table thead th {
+      background: var(--primary);
+      color: #fff;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 1rem 1.25rem;
+      text-align: left;
+    }
+    .guide-table tbody td {
+      padding: 0.85rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.9rem;
+      vertical-align: top;
+    }
+    .guide-table tbody tr:last-child td { border-bottom: none; }
+    .guide-table tbody tr:nth-child(even) { background: #F7FAFC; }
+    .guide-table tbody tr:hover { background: #EDF2F7; }
+    .guide-table code {
+      background: #1A365D;
+      color: #E8B84A;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-family: 'Courier New', monospace;
+      white-space: nowrap;
+    }
+
+    /* ===== TOAST ===== */
+    #toast-container {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .toast {
+      padding: 0.85rem 1.25rem;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 0.875rem;
+      font-weight: 500;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+      animation: slideInRight 0.4s ease;
+      max-width: 340px;
+    }
+    .toast-success { background: #2F855A; }
+    .toast-error { background: #C53030; }
+    .toast-info { background: var(--primary); }
+
+    @keyframes slideInRight {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    /* ===== FOOTER WAVE ===== */
+    .footer-wave {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    /* ===== REDUCED MOTION ===== */
+    @media (prefers-reduced-motion: reduce) {
+      .hero-shape, .scroll-indicator, .skeleton { animation: none !important; }
+      .reveal { opacity: 1; transform: none; transition: none; }
+      html { scroll-behavior: auto; }
+    }
+
+    /* ===== CUSTOM SCROLLBAR ===== */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+  </style>
 </head>
 
-<body class="font-inter bg-offwhite">
+<body class="font-body">
 
-<!-- ═══════════ NAVIGATION ═══════════ -->
-<nav id="navbar" class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 transition-shadow duration-300">
-    <div class="max-w-6xl mx-auto px-6">
-        <div class="flex items-center justify-between h-16">
-            <a href="#beranda" class="flex items-center gap-2">
-                <div class="w-8 h-8 bg-navy rounded-lg flex items-center justify-center">
-                    <span class="text-white font-poppins font-bold text-sm">G</span>
-                </div>
-                <span class="font-poppins font-bold text-navy text-lg">GuruDigital</span>
-            </a>
-            <div class="hidden md:flex items-center gap-1">
-                <a href="#beranda"   class="nav-link px-4 py-2 text-sm font-medium text-gray-600 hover:text-amber transition-colors rounded-lg hover:bg-amber-50">Beranda</a>
-                <a href="#profil"    class="nav-link px-4 py-2 text-sm font-medium text-gray-600 hover:text-amber transition-colors rounded-lg hover:bg-amber-50">Profil</a>
-                <a href="#portofolio" class="nav-link px-4 py-2 text-sm font-medium text-gray-600 hover:text-amber transition-colors rounded-lg hover:bg-amber-50">Portofolio</a>
-                <a href="#artikel"   class="nav-link px-4 py-2 text-sm font-medium text-gray-600 hover:text-amber transition-colors rounded-lg hover:bg-amber-50">Artikel</a>
-                <a href="#link"      class="nav-link px-4 py-2 text-sm font-medium text-gray-600 hover:text-amber transition-colors rounded-lg hover:bg-amber-50">Link</a>
-                <a href="#guide"     class="nav-link px-4 py-2 text-sm font-medium text-gray-600 hover:text-amber transition-colors rounded-lg hover:bg-amber-50">Guide</a>
-            </div>
-            <button id="menu-toggle" class="md:hidden p-2 rounded-lg hover:bg-gray-100" aria-label="Menu">
-                <svg class="w-6 h-6 text-navy" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-            </button>
-        </div>
-        <div id="mobile-menu" class="mob-menu md:hidden">
-            <div class="py-3 space-y-1 border-t border-gray-100">
-                <a href="#beranda"   class="mob-link block px-4 py-2.5 text-sm font-medium text-gray-600 hover:text-amber hover:bg-amber-50 rounded-lg">Beranda</a>
-                <a href="#profil"    class="mob-link block px-4 py-2.5 text-sm font-medium text-gray-600 hover:text-amber hover:bg-amber-50 rounded-lg">Profil</a>
-                <a href="#portofolio" class="mob-link block px-4 py-2.5 text-sm font-medium text-gray-600 hover:text-amber hover:bg-amber-50 rounded-lg">Portofolio</a>
-                <a href="#artikel"   class="mob-link block px-4 py-2.5 text-sm font-medium text-gray-600 hover:text-amber hover:bg-amber-50 rounded-lg">Artikel</a>
-                <a href="#link"      class="mob-link block px-4 py-2.5 text-sm font-medium text-gray-600 hover:text-amber hover:bg-amber-50 rounded-lg">Link</a>
-                <a href="#guide"     class="mob-link block px-4 py-2.5 text-sm font-medium text-gray-600 hover:text-amber hover:bg-amber-50 rounded-lg">Guide</a>
-            </div>
-        </div>
+  <!-- Scroll Progress Bar -->
+  <div id="scroll-progress" aria-hidden="true"></div>
+
+  <!-- ========== NAVBAR ========== -->
+  <nav id="navbar">
+    <div class="max-w-6xl mx-auto px-6 flex items-center justify-between h-16 md:h-20">
+      <a href="#beranda" class="font-heading font-900 text-white text-xl tracking-tight" style="font-weight:900;">
+        Guru<span class="text-amber">Digital</span>
+      </a>
+      <button id="menu-toggle" aria-label="Toggle navigasi">
+        <span></span><span></span><span></span>
+      </button>
+      <ul id="nav-menu" class="flex items-center gap-8 list-none">
+        <li><a href="#beranda" class="nav-link active">Beranda</a></li>
+        <li><a href="#profil" class="nav-link">Profil</a></li>
+        <li><a href="#portofolio" class="nav-link">Portofolio</a></li>
+        <li><a href="#artikel" class="nav-link">Artikel</a></li>
+        <li><a href="#link-eksternal" class="nav-link">Link Eksternal</a></li>
+        <li><a href="#guide" class="nav-link">Guide</a></li>
+      </ul>
     </div>
-</nav>
+  </nav>
 
-<!-- ═══════════ BERANDA ═══════════ -->
-<section id="beranda" class="min-h-screen flex items-center pt-16 bg-gradient-to-br from-offwhite via-white to-amber-50">
-    <div class="max-w-6xl mx-auto px-6 py-20">
-        <div class="grid md:grid-cols-2 gap-12 items-center">
-            <div class="fade-up">
-                <div class="inline-flex items-center gap-2 bg-amber-100 text-amber-700 px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-widest mb-6">
-                    <span class="w-2 h-2 bg-amber-500 rounded-full animate-pulse"></span>
-                    JAMstack Personal Web
-                </div>
-                <h1 class="font-poppins text-4xl md:text-5xl lg:text-6xl font-bold text-navy leading-tight mb-6">
-                    Selamat Datang di<br><span class="text-amber">GuruDigital</span>
-                </h1>
-                <p class="text-gray-500 text-lg leading-relaxed mb-8 max-w-lg">
-                    Berbagi pengetahuan dan inspirasi melalui tulisan. Konten dikelola langsung dari <strong class="text-navy">Google Spreadsheet</strong> — tanpa backend, tanpa database.
-                </p>
-                <div class="flex flex-wrap gap-4">
-                    <a href="#artikel" class="inline-flex items-center gap-2 bg-navy text-white px-6 py-3 rounded-xl font-medium text-sm hover:bg-navy-400 transition-all hover:shadow-lg hover:shadow-navy/20">
-                        Baca Artikel
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-                    </a>
-                    <a href="#profil" class="inline-flex items-center gap-2 border-2 border-navy/20 text-navy px-6 py-3 rounded-xl font-medium text-sm hover:border-navy hover:bg-navy/5 transition-all">
-                        Tentang Saya
-                    </a>
-                </div>
-            </div>
-            <div class="relative flex justify-center fade-up">
-                <div class="relative w-72 h-72 md:w-96 md:h-96">
-                    <div class="absolute inset-0 bg-amber/20 rounded-3xl rotate-6"></div>
-                    <div class="absolute inset-0 bg-navy/10 rounded-3xl -rotate-3"></div>
-                    <div class="relative w-full h-full rounded-3xl overflow-hidden bg-gradient-to-br from-navy to-navy-400 flex items-center justify-center">
-                        <div class="text-center text-white p-8">
-                            <div class="w-20 h-20 mx-auto mb-4 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm">
-                                <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
-                            </div>
-                            <p class="font-poppins font-semibold text-lg">Your Name</p>
-                            <p class="text-white/70 text-sm mt-1">Digital Educator</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+  <main>
+    <!-- ========== HERO / BERANDA ========== -->
+    <section id="beranda">
+      <!-- Floating shapes -->
+      <div class="hero-shape hs-1"></div>
+      <div class="hero-shape hs-2"></div>
+      <div class="hero-shape hs-3"></div>
+      <div class="hero-shape hs-4"></div>
+      <div class="hero-shape hs-5"></div>
 
-<!-- ═══════════ PROFIL ═══════════ -->
-<section id="profil" class="py-24 bg-white">
-    <div class="max-w-6xl mx-auto px-6">
-        <div class="fade-up text-center mb-16">
-            <span class="text-amber font-semibold text-xs uppercase tracking-[0.2em]">Tentang Saya</span>
-            <h2 class="font-poppins text-3xl md:text-4xl font-bold text-navy mt-3">Profil</h2>
-            <div class="w-16 h-1 bg-amber mx-auto mt-4 rounded-full"></div>
-        </div>
-        <div class="grid md:grid-cols-5 gap-12 items-start">
-            <div class="md:col-span-2 fade-up">
-                <div class="bg-gradient-to-br from-navy to-navy-400 rounded-2xl p-8 text-white text-center sticky top-24">
-                    <div class="w-24 h-24 mx-auto bg-white/20 rounded-2xl flex items-center justify-center mb-4 backdrop-blur-sm">
-                        <svg class="w-12 h-12" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
-                    </div>
-                    <h3 class="font-poppins font-bold text-xl">Nama Anda</h3>
-                    <p class="text-white/70 text-sm mt-1">Digital Educator &amp; Writer</p>
-                    <div class="mt-6 pt-6 border-t border-white/20 space-y-3 text-left text-sm">
-                        <div class="flex items-center gap-3">
-                            <svg class="w-4 h-4 text-amber shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                            <span class="text-white/80">Indonesia</span>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <svg class="w-4 h-4 text-amber shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                            <span class="text-white/80">email@example.com</span>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <svg class="w-4 h-4 text-amber shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/></svg>
-                            <span class="text-white/80">gurudigital.id</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="md:col-span-3 fade-up space-y-6">
-                <h3 class="font-poppins text-2xl font-bold text-navy">Halo! 👋</h3>
-                <p class="text-gray-600 leading-relaxed">
-                    Saya adalah seorang pendidik digital yang bersemangat dalam memanfaatkan teknologi untuk meningkatkan kualitas pembelajaran. Melalui platform ini, saya berbagi artikel, tutorial, dan panduan.
-                </p>
-                <p class="text-gray-600 leading-relaxed">
-                    Situs ini dibangun dengan pendekatan <strong class="text-navy">JAMstack</strong> — konten dikelola melalui Google Spreadsheet, diproses di sisi klien dengan JavaScript, dan ditampilkan secara statis. Tidak ada server, tidak ada database — hanya file, spreadsheet, dan CDN.
-                </p>
-                <div class="grid grid-cols-2 gap-4 mt-8">
-                    <div class="bg-offwhite rounded-xl p-5 text-center">
-                        <div class="text-3xl font-poppins font-bold text-navy">50+</div>
-                        <div class="text-gray-500 text-sm mt-1">Artikel</div>
-                    </div>
-                    <div class="bg-offwhite rounded-xl p-5 text-center">
-                        <div class="text-3xl font-poppins font-bold text-navy">5+</div>
-                        <div class="text-gray-500 text-sm mt-1">Tahun Pengalaman</div>
-                    </div>
-                    <div class="bg-offwhite rounded-xl p-5 text-center">
-                        <div class="text-3xl font-poppins font-bold text-navy">1K+</div>
-                        <div class="text-gray-500 text-sm mt-1">Pembaca</div>
-                    </div>
-                    <div class="bg-offwhite rounded-xl p-5 text-center">
-                        <div class="text-3xl font-poppins font-bold text-navy">10+</div>
-                        <div class="text-gray-500 text-sm mt-1">Proyek</div>
-                    </div>
-                </div>
-                <div class="mt-8">
-                    <h4 class="font-poppins font-semibold text-navy mb-3">Keahlian</h4>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="px-3 py-1.5 bg-navy/10 text-navy text-xs font-medium rounded-lg">HTML &amp; CSS</span>
-                        <span class="px-3 py-1.5 bg-navy/10 text-navy text-xs font-medium rounded-lg">JavaScript</span>
-                        <span class="px-3 py-1.5 bg-navy/10 text-navy text-xs font-medium rounded-lg">Google Apps Script</span>
-                        <span class="px-3 py-1.5 bg-amber-100 text-amber text-xs font-medium rounded-lg">JAMstack</span>
-                        <span class="px-3 py-1.5 bg-amber-100 text-amber text-xs font-medium rounded-lg">PWA</span>
-                        <span class="px-3 py-1.5 bg-navy/10 text-navy text-xs font-medium rounded-lg">Markdown</span>
-                        <span class="px-3 py-1.5 bg-navy/10 text-navy text-xs font-medium rounded-lg">Pendidikan Digital</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+      <div class="relative z-10 text-center px-6 max-w-3xl mx-auto">
+        <p class="text-amber font-semibold text-sm tracking-widest uppercase mb-4 reveal">Edukator &amp; Developer</p>
+        <h1 class="font-heading text-white leading-none mb-6 reveal reveal-delay-1" style="font-weight:900; font-size: clamp(3rem, 8vw, 5.5rem);">
+          Guru<span class="text-amber">Digital</span>
+        </h1>
+        <p class="text-slate-300 text-lg md:text-xl leading-relaxed mb-10 max-w-xl mx-auto reveal reveal-delay-2">
+          Membangun solusi pembelajaran digital yang inovatif, praktis, dan berdampak nyata untuk dunia pendidikan Indonesia.
+        </p>
+        <a href="#profil" class="inline-block bg-amber hover:bg-amber-light text-navy-dark font-heading font-bold px-8 py-3.5 rounded-full transition-all duration-300 hover:shadow-lg hover:shadow-amber/20 reveal reveal-delay-3">
+          Jelajahi Sekarang
+        </a>
+      </div>
 
-<!-- ═══════════ PORTOFOLIO ═══════════ -->
-<section id="portofolio" class="py-24 bg-offwhite">
-    <div class="max-w-6xl mx-auto px-6">
-        <div class="fade-up text-center mb-16">
-            <span class="text-amber font-semibold text-xs uppercase tracking-[0.2em]">Karya</span>
-            <h2 class="font-poppins text-3xl md:text-4xl font-bold text-navy mt-3">Portofolio</h2>
-            <div class="w-16 h-1 bg-amber mx-auto mt-4 rounded-full"></div>
-        </div>
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div class="fade-up card-h bg-white rounded-2xl overflow-hidden border border-gray-100">
-                <div class="h-48 bg-gradient-to-br from-navy to-navy-300 flex items-center justify-center">
-                    <svg class="w-12 h-12 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                </div>
-                <div class="p-6">
-                    <span class="px-2.5 py-0.5 bg-amber-100 text-amber text-[10px] font-semibold uppercase tracking-wider rounded">Web App</span>
-                    <h3 class="font-poppins font-semibold text-navy text-lg mt-3 mb-2">Portal Pembelajaran</h3>
-                    <p class="text-gray-500 text-sm leading-relaxed">Platform e-learning dengan fitur interaktif dan manajemen kursus berbasis web.</p>
-                </div>
-            </div>
-            <div class="fade-up card-h bg-white rounded-2xl overflow-hidden border border-gray-100">
-                <div class="h-48 bg-gradient-to-br from-amber to-amber-300 flex items-center justify-center">
-                    <svg class="w-12 h-12 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
-                </div>
-                <div class="p-6">
-                    <span class="px-2.5 py-0.5 bg-navy/10 text-navy text-[10px] font-semibold uppercase tracking-wider rounded">Mobile</span>
-                    <h3 class="font-poppins font-semibold text-navy text-lg mt-3 mb-2">EduTrack App</h3>
-                    <p class="text-gray-500 text-sm leading-relaxed">Aplikasi pelacak progress belajar dengan notifikasi dan visualisasi data.</p>
-                </div>
-            </div>
-            <div class="fade-up card-h bg-white rounded-2xl overflow-hidden border border-gray-100">
-                <div class="h-48 bg-gradient-to-br from-gray-700 to-gray-500 flex items-center justify-center">
-                    <svg class="w-12 h-12 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
-                </div>
-                <div class="p-6">
-                    <span class="px-2.5 py-0.5 bg-amber-100 text-amber text-[10px] font-semibold uppercase tracking-wider rounded">JAMstack</span>
-                    <h3 class="font-poppins font-semibold text-navy text-lg mt-3 mb-2">Blog Generator</h3>
-                    <p class="text-gray-500 text-sm leading-relaxed">Generator blog statis dari Google Sheet, dengan PWA dan Markdown support.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+      <!-- Scroll indicator -->
+      <div class="scroll-indicator">
+        <i class="fas fa-chevron-down text-white/40 text-xl"></i>
+      </div>
+    </section>
 
-<!-- ═══════════ ARTIKEL ═══════════ -->
-<section id="artikel" class="py-24 bg-white">
-    <div class="max-w-6xl mx-auto px-6">
-        <div class="fade-up text-center mb-16">
-            <span class="text-amber font-semibold text-xs uppercase tracking-[0.2em]">Blog</span>
-            <h2 class="font-poppins text-3xl md:text-4xl font-bold text-navy mt-3">Artikel</h2>
-            <div class="w-16 h-1 bg-amber mx-auto mt-4 rounded-full"></div>
-            <p class="text-gray-500 mt-4 max-w-xl mx-auto">Konten diambil langsung dari Google Spreadsheet. Tulis di Sheet, tampil di web.</p>
+    <!-- ========== PROFIL ========== -->
+    <section id="profil" class="py-20 md:py-28 bg-offwhite">
+      <div class="max-w-6xl mx-auto px-6">
+        <div class="reveal">
+          <h2 class="section-title">Profil</h2>
+          <p class="text-slate-500 mt-4 mb-12 max-w-lg">Sedikit cerita tentang perjalanan dan fokus saya di dunia digital dan pendidikan.</p>
         </div>
 
-        <div class="fade-up flex flex-wrap items-center gap-4 mb-8">
-            <button id="btn-reload" class="inline-flex items-center gap-2 bg-navy text-white px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-navy-400 transition-all">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-                Muat Ulang
-            </button>
-            <span id="status-text" class="text-sm text-gray-400"></span>
+        <div class="grid md:grid-cols-5 gap-10 items-center">
+          <!-- Foto -->
+          <div class="md:col-span-2 reveal reveal-delay-1">
+            <div class="relative">
+              <img
+                src="https://picsum.photos/seed/gurudigital42/500/500"
+                alt="Foto GuruDigital"
+                class="rounded-2xl shadow-xl w-full object-cover aspect-square"
+              >
+              <div class="absolute -bottom-3 -right-3 w-20 h-20 bg-amber rounded-2xl -z-10"></div>
+            </div>
+          </div>
+
+          <!-- Teks -->
+          <div class="md:col-span-3 reveal reveal-delay-2">
+            <h3 class="font-heading font-bold text-2xl text-navy mb-4">Tentang Saya</h3>
+            <p class="text-slate-600 leading-relaxed mb-4">
+              Saya adalah seorang edukator dan developer yang berfokus pada pembuatan solusi teknologi untuk dunia pendidikan. Dengan pengalaman lebih dari 5 tahun, saya percaya bahwa teknologi dapat menjadi jembatan untuk mengatasi kesenjangan akses pendidikan di Indonesia.
+            </p>
+            <p class="text-slate-600 leading-relaxed mb-8">
+              Melalui platform GuruDigital, saya mengembangkan berbagai proyek mulai dari sistem e-learning, quiz interaktif, hingga dashboard analitik yang membantu guru dan siswa belajar lebih efektif.
+            </p>
+
+            <!-- Statistik -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <div class="text-center p-4 bg-white rounded-xl shadow-sm">
+                <div class="font-heading font-bold text-2xl text-navy">12+</div>
+                <div class="text-xs text-slate-500 mt-1">Proyek</div>
+              </div>
+              <div class="text-center p-4 bg-white rounded-xl shadow-sm">
+                <div class="font-heading font-bold text-2xl text-navy">45+</div>
+                <div class="text-xs text-slate-500 mt-1">Artikel</div>
+              </div>
+              <div class="text-center p-4 bg-white rounded-xl shadow-sm">
+                <div class="font-heading font-bold text-2xl text-navy">1.2K</div>
+                <div class="text-xs text-slate-500 mt-1">Siswa</div>
+              </div>
+              <div class="text-center p-4 bg-white rounded-xl shadow-sm">
+                <div class="font-heading font-bold text-2xl text-navy">5+</div>
+                <div class="text-xs text-slate-500 mt-1">Tahun</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== PORTOFOLIO ========== -->
+    <section id="portofolio" class="py-20 md:py-28 bg-white">
+      <div class="max-w-6xl mx-auto px-6">
+        <div class="reveal">
+          <h2 class="section-title">Portofolio</h2>
+          <p class="text-slate-500 mt-4 mb-12 max-w-lg">Beberapa proyek terpilih yang telah saya kembangkan.</p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Proyek 1 -->
+          <div class="card-hover bg-offwhite rounded-2xl overflow-hidden shadow-sm reveal reveal-delay-1">
+            <img src="https://picsum.photos/seed/elearning77/600/360" alt="Platform E-Learning" class="w-full h-48 object-cover">
+            <div class="p-5">
+              <h3 class="font-heading font-bold text-lg text-navy mb-2">Platform E-Learning</h3>
+              <p class="text-slate-500 text-sm leading-relaxed mb-3">Sistem manajemen pembelajaran online dengan fitur video, quiz, dan sertifikasi otomatis.</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="text-xs bg-navy/10 text-navy px-2.5 py-1 rounded-full font-medium">React</span>
+                <span class="text-xs bg-navy/10 text-navy px-2.5 py-1 rounded-full font-medium">Node.js</span>
+                <span class="text-xs bg-navy/10 text-navy px-2.5 py-1 rounded-full font-medium">PostgreSQL</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Proyek 2 -->
+          <div class="card-hover bg-offwhite rounded-2xl overflow-hidden shadow-sm reveal reveal-delay-2">
+            <img src="https://picsum.photos/seed/quizapp88/600/360" alt="Quiz Interaktif" class="w-full h-48 object-cover">
+            <div class="p-5">
+              <h3 class="font-heading font-bold text-lg text-navy mb-2">Quiz Interaktif</h3>
+              <p class="text-slate-500 text-sm leading-relaxed mb-3">Aplikasi kuis real-time dengan leaderboard, feedback langsung, dan mode multiplayer.</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="text-xs bg-navy/10 text-navy px-2.5 py-1 rounded-full font-medium">Vue.js</span>
+                <span class="text-xs bg-navy/10 text-navy px-2.5 py-1 rounded-full font-medium">Firebase</span>
+                <span class="text-xs bg-navy/10 text-navy px-2.5 py-1 rounded-full font-medium">WebSocket</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Proyek 3 -->
+          <div class="card-hover bg-offwhite rounded-2xl overflow-hidden shadow-sm reveal reveal-delay-3">
+            <img src="https://picsum.photos/seed/analytics99/600/360" alt="Dashboard Analitik" class="w-full h-48 object-cover">
+            <div class="p-5">
+              <h3 class="font-heading font-bold text-lg text-navy mb-2">Dashboard Analitik</h3>
+              <p class="text-slate-500 text-sm leading-relaxed mb-3">Visualisasi data kinerja siswa dan guru untuk mendukung pengambilan keputusan berbasis data.</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="text-xs bg-navy/10 text-navy px-2.5 py-1 rounded-full font-medium">Chart.js</span>
+                <span class="text-xs bg-navy/10 text-navy px-2.5 py-1 rounded-full font-medium">Python</span>
+                <span class="text-xs bg-navy/10 text-navy px-2.5 py-1 rounded-full font-medium">API</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Proyek 4 -->
+          <div class="card-hover bg-offwhite rounded-2xl overflow-hidden shadow-sm reveal reveal-delay-1">
+            <img src="https://picsum.photos/seed/banksoal55/600/360" alt="Bank Soal Digital" class="w-full h-48 object-cover">
+            <div class="p-5">
+              <h3 class="font-heading font-bold text-lg text-navy mb-2">Bank Soal Digital</h3>
+              <p class="text-slate-500 text-sm leading-relaxed mb-3">Repositori soal terstruktur dengan fitur pembuatan soal otomatis dan export ke berbagai format.</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="text-xs bg-navy/10 text-navy px-2.5 py-1 rounded-full font-medium">Next.js</span>
+                <span class="text-xs bg-navy/10 text-navy px-2.5 py-1 rounded-full font-medium">MongoDB</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Proyek 5 -->
+          <div class="card-hover bg-offwhite rounded-2xl overflow-hidden shadow-sm reveal reveal-delay-2">
+            <img src="https://picsum.photos/seed/rapor44/600/360" alt="Rapor Digital" class="w-full h-48 object-cover">
+            <div class="p-5">
+              <h3 class="font-heading font-bold text-lg text-navy mb-2">Rapor Digital</h3>
+              <p class="text-slate-500 text-sm leading-relaxed mb-3">Sistem pelaporan hasil belajar berbasis web yang bisa diakses oleh guru, siswa, dan orang tua.</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="text-xs bg-navy/10 text-navy px-2.5 py-1 rounded-full font-medium">Laravel</span>
+                <span class="text-xs bg-navy/10 text-navy px-2.5 py-1 rounded-full font-medium">MySQL</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Proyek 6 -->
+          <div class="card-hover bg-offwhite rounded-2xl overflow-hidden shadow-sm reveal reveal-delay-3">
+            <img src="https://picsum.photos/seed/fitur66/600/360" alt="Kelas Virtual" class="w-full h-48 object-cover">
+            <div class="p-5">
+              <h3 class="font-heading font-bold text-lg text-navy mb-2">Kelas Virtual</h3>
+              <p class="text-slate-500 text-sm leading-relaxed mb-3">Ruang kelas virtual dengan video conference, papan tulis interaktif, dan chat diskusi.</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="text-xs bg-navy/10 text-navy px-2.5 py-1 rounded-full font-medium">WebRTC</span>
+                <span class="text-xs bg-navy/10 text-navy px-2.5 py-1 rounded-full font-medium">Canvas</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== ARTIKEL ========== -->
+    <section id="artikel" class="py-20 md:py-28 bg-offwhite">
+      <div class="max-w-4xl mx-auto px-6">
+        <div class="reveal">
+          <h2 class="section-title">Artikel</h2>
+          <p class="text-slate-500 mt-4 mb-6 max-w-lg">Tulisan terbaru saya, diambil langsung dari Google Spreadsheet.</p>
+          <div class="bg-white rounded-xl px-5 py-3 mb-10 text-sm text-slate-600 border border-slate-200 flex items-start gap-3">
+            <i class="fas fa-info-circle text-amber mt-0.5"></i>
+            <span>Data artikel diambil dari Google Sheet secara real-time. Pastikan spreadsheet Anda dipublikasikan sebagai CSV dan URL sudah dikonfigurasi di kode JavaScript.</span>
+          </div>
         </div>
 
         <div id="posts-container">
-            <div class="grid md:grid-cols-2 gap-6" id="skeleton-loader">
-                <div class="bg-offwhite rounded-2xl p-6 space-y-4"><div class="skel h-4 w-1/3"></div><div class="skel h-6 w-3/4"></div><div class="space-y-2"><div class="skel h-3 w-full"></div><div class="skel h-3 w-5/6"></div><div class="skel h-3 w-4/6"></div></div></div>
-                <div class="bg-offwhite rounded-2xl p-6 space-y-4"><div class="skel h-4 w-1/4"></div><div class="skel h-6 w-2/3"></div><div class="space-y-2"><div class="skel h-3 w-full"></div><div class="skel h-3 w-4/5"></div><div class="skel h-3 w-3/5"></div></div></div>
-            </div>
+          <!-- Skeleton loading akan diisi oleh JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== LINK EKSTERNAL ========== -->
+    <section id="link-eksternal" class="py-20 md:py-28 bg-white">
+      <div class="max-w-6xl mx-auto px-6">
+        <div class="reveal">
+          <h2 class="section-title">Link Eksternal</h2>
+          <p class="text-slate-500 mt-4 mb-12 max-w-lg">Temukan saya di berbagai platform dan komunitas.</p>
         </div>
 
-        <div id="error-state" class="hidden text-center py-16">
-            <div class="w-16 h-16 mx-auto mb-4 bg-red-50 rounded-2xl flex items-center justify-center">
-                <svg class="w-8 h-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <a href="https://github.com" target="_blank" rel="noopener noreferrer"
+             class="card-hover flex items-center gap-4 bg-offwhite rounded-xl p-5 border border-slate-200 reveal reveal-delay-1 group">
+            <div class="w-12 h-12 rounded-xl bg-navy flex items-center justify-center flex-shrink-0 group-hover:bg-amber transition-colors">
+              <i class="fab fa-github text-white text-xl"></i>
             </div>
-            <h3 class="font-poppins font-semibold text-navy text-lg">Gagal Memuat Artikel</h3>
-            <p id="error-message" class="text-gray-500 text-sm mt-2"></p>
-            <button onclick="fetchPosts()" class="mt-4 inline-flex items-center gap-2 bg-navy text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-navy-400 transition-all">Coba Lagi</button>
+            <div>
+              <div class="font-heading font-bold text-navy group-hover:text-amber transition-colors">GitHub</div>
+              <div class="text-slate-500 text-sm">Repositori dan proyek open-source</div>
+            </div>
+          </a>
+
+          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"
+             class="card-hover flex items-center gap-4 bg-offwhite rounded-xl p-5 border border-slate-200 reveal reveal-delay-2 group">
+            <div class="w-12 h-12 rounded-xl bg-navy flex items-center justify-center flex-shrink-0 group-hover:bg-amber transition-colors">
+              <i class="fab fa-linkedin-in text-white text-xl"></i>
+            </div>
+            <div>
+              <div class="font-heading font-bold text-navy group-hover:text-amber transition-colors">LinkedIn</div>
+              <div class="text-slate-500 text-sm">Profil profesional dan jaringan</div>
+            </div>
+          </a>
+
+          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"
+             class="card-hover flex items-center gap-4 bg-offwhite rounded-xl p-5 border border-slate-200 reveal reveal-delay-3 group">
+            <div class="w-12 h-12 rounded-xl bg-navy flex items-center justify-center flex-shrink-0 group-hover:bg-amber transition-colors">
+              <i class="fab fa-x-twitter text-white text-xl"></i>
+            </div>
+            <div>
+              <div class="font-heading font-bold text-navy group-hover:text-amber transition-colors">X / Twitter</div>
+              <div class="text-slate-500 text-sm">Pemikiran dan update harian</div>
+            </div>
+          </a>
+
+          <a href="https://youtube.com" target="_blank" rel="noopener noreferrer"
+             class="card-hover flex items-center gap-4 bg-offwhite rounded-xl p-5 border border-slate-200 reveal reveal-delay-1 group">
+            <div class="w-12 h-12 rounded-xl bg-navy flex items-center justify-center flex-shrink-0 group-hover:bg-amber transition-colors">
+              <i class="fab fa-youtube text-white text-xl"></i>
+            </div>
+            <div>
+              <div class="font-heading font-bold text-navy group-hover:text-amber transition-colors">YouTube</div>
+              <div class="text-slate-500 text-sm">Tutorial dan video edukasi</div>
+            </div>
+          </a>
+
+          <a href="https://medium.com" target="_blank" rel="noopener noreferrer"
+             class="card-hover flex items-center gap-4 bg-offwhite rounded-xl p-5 border border-slate-200 reveal reveal-delay-2 group">
+            <div class="w-12 h-12 rounded-xl bg-navy flex items-center justify-center flex-shrink-0 group-hover:bg-amber transition-colors">
+              <i class="fab fa-medium text-white text-xl"></i>
+            </div>
+            <div>
+              <div class="font-heading font-bold text-navy group-hover:text-amber transition-colors">Medium</div>
+              <div class="text-slate-500 text-sm">Artikel panjang dan opini teknologi</div>
+            </div>
+          </a>
+
+          <a href="mailto:hello@gurudigital.id"
+             class="card-hover flex items-center gap-4 bg-offwhite rounded-xl p-5 border border-slate-200 reveal reveal-delay-3 group">
+            <div class="w-12 h-12 rounded-xl bg-navy flex items-center justify-center flex-shrink-0 group-hover:bg-amber transition-colors">
+              <i class="fas fa-envelope text-white text-xl"></i>
+            </div>
+            <div>
+              <div class="font-heading font-bold text-navy group-hover:text-amber transition-colors">Email</div>
+              <div class="text-slate-500 text-sm">hello@gurudigital.id</div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== GUIDE ========== -->
+    <section id="guide" class="py-20 md:py-28 bg-offwhite">
+      <div class="max-w-4xl mx-auto px-6">
+        <div class="reveal">
+          <h2 class="section-title">Panduan Markdown</h2>
+          <p class="text-slate-500 mt-4 mb-10 max-w-lg">Referensi cepat sintaks Markdown yang didukung di kolom <strong>KontenMarkdown</strong> Google Sheet Anda.</p>
         </div>
 
-        <div id="empty-state" class="hidden text-center py-16">
-            <div class="w-16 h-16 mx-auto mb-4 bg-amber-50 rounded-2xl flex items-center justify-center">
-                <svg class="w-8 h-8 text-amber" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-            </div>
-            <h3 class="font-poppins font-semibold text-navy text-lg">Belum Ada Artikel</h3>
-            <p class="text-gray-500 text-sm mt-2">Mulai tulis konten di Google Spreadsheet Anda.</p>
+        <div class="reveal reveal-delay-1 overflow-x-auto">
+          <table class="guide-table">
+            <thead>
+              <tr>
+                <th style="width:22%;">Elemen</th>
+                <th style="width:40%;">Sintaks Markdown</th>
+                <th style="width:38%;">Keterangan</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="font-semibold text-navy">Heading</td>
+                <td><code># Judul</code></td>
+                <td class="text-slate-600">Gunakan 1-6 tanda <code>#</code> untuk H1-H6</td>
+              </tr>
+              <tr>
+                <td class="font-semibold text-navy">Bold</td>
+                <td><code>**teks tebal**</code></td>
+                <td class="text-slate-600">Menghasilkan <strong>teks tebal</strong></td>
+              </tr>
+              <tr>
+                <td class="font-semibold text-navy">Italic</td>
+                <td><code>*teks miring*</code></td>
+                <td class="text-slate-600">Menghasilkan <em>teks miring</em></td>
+              </tr>
+              <tr>
+                <td class="font-semibold text-navy">Link</td>
+                <td><code>[teks](url)</code></td>
+                <td class="text-slate-600">Contoh: <code>[Google](https://google.com)</code></td>
+              </tr>
+              <tr>
+                <td class="font-semibold text-navy">Image</td>
+                <td><code>![alt](url)</code></td>
+                <td class="text-slate-600">Tampilkan gambar dari URL</td>
+              </tr>
+              <tr>
+                <td class="font-semibold text-navy">List</td>
+                <td><code>- item</code></td>
+                <td class="text-slate-600">Gunakan <code>-</code> atau <code>1.</code> untuk daftar</td>
+              </tr>
+              <tr>
+                <td class="font-semibold text-navy">Code</td>
+                <td><code>`kode`</code></td>
+                <td class="text-slate-600">Inline code dengan backtick</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
+
+        <div class="mt-8 bg-white rounded-xl p-6 border border-slate-200 reveal reveal-delay-2">
+          <h3 class="font-heading font-bold text-navy mb-3 flex items-center gap-2">
+            <i class="fas fa-lightbulb text-amber"></i>
+            Contoh Isi Spreadsheet
+          </h3>
+          <div class="text-sm text-slate-600 space-y-1 font-mono bg-navy/5 rounded-lg p-4 overflow-x-auto">
+            <div class="text-slate-400 mb-2">Judul | Tanggal | Kategori | KontenMarkdown</div>
+            <div>Memulai dengan JAMstack | 2024-12-01 | Tutorial | **JAMstack** adalah arsitektur modern... Baca selengkapnya [di sini](https://example.com)</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="bg-navy text-white/70 relative">
+    <!-- Wave separator -->
+    <svg class="footer-wave" viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <path d="M0 60V30C240 0 480 0 720 30C960 60 1200 60 1440 30V60H0Z" fill="#1A365D"/>
+    </svg>
+
+    <div class="max-w-6xl mx-auto px-6 py-10">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div>
+          <span class="font-heading font-bold text-xl text-white">Guru<span class="text-amber">Digital</span></span>
+          <p class="text-sm mt-1">Membangun pendidikan digital yang berdampak.</p>
+        </div>
+        <div class="flex items-center gap-5">
+          <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="text-white/50 hover:text-amber transition-colors" aria-label="GitHub"><i class="fab fa-github text-lg"></i></a>
+          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="text-white/50 hover:text-amber transition-colors" aria-label="LinkedIn"><i class="fab fa-linkedin-in text-lg"></i></a>
+          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" class="text-white/50 hover:text-amber transition-colors" aria-label="Twitter"><i class="fab fa-x-twitter text-lg"></i></a>
+          <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="text-white/50 hover:text-amber transition-colors" aria-label="YouTube"><i class="fab fa-youtube text-lg"></i></a>
+        </div>
+      </div>
+      <div class="border-t border-white/10 mt-8 pt-6 text-center text-sm">
+        &copy; 2024 GuruDigital. Dibuat dengan semangat berbagi.
+      </div>
     </div>
-</section>
+  </footer>
 
-<!-- ═══════════ LINK EKSTERNAL ═══════════ -->
-<section id="link" class="py-24 bg-offwhite">
-    <div class="max-w-6xl mx-auto px-6">
-        <div class="fade-up text-center mb-16">
-            <span class="text-amber font-semibold text-xs uppercase tracking-[0.2em]">Koneksi</span>
-            <h2 class="font-poppins text-3xl md:text-4xl font-bold text-navy mt-3">Link Eksternal</h2>
-            <div class="w-16 h-1 bg-amber mx-auto mt-4 rounded-full"></div>
-        </div>
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-3xl mx-auto">
-            <a href="https://github.com" target="_blank" rel="noopener" class="fade-up card-h flex items-center gap-4 bg-white p-5 rounded-2xl border border-gray-100 group">
-                <div class="w-12 h-12 bg-gray-900 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-                </div>
-                <div><div class="font-poppins font-semibold text-navy text-sm">GitHub</div><div class="text-gray-400 text-xs">Repositori &amp; Kode</div></div>
-            </a>
-            <a href="https://linkedin.com" target="_blank" rel="noopener" class="fade-up card-h flex items-center gap-4 bg-white p-5 rounded-2xl border border-gray-100 group">
-                <div class="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-                </div>
-                <div><div class="font-poppins font-semibold text-navy text-sm">LinkedIn</div><div class="text-gray-400 text-xs">Profil Profesional</div></div>
-            </a>
-            <a href="https://twitter.com" target="_blank" rel="noopener" class="fade-up card-h flex items-center gap-4 bg-white p-5 rounded-2xl border border-gray-100 group">
-                <div class="w-12 h-12 bg-sky-500 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                </div>
-                <div><div class="font-poppins font-semibold text-navy text-sm">X / Twitter</div><div class="text-gray-400 text-xs">Microblogging</div></div>
-            </a>
-            <a href="https://youtube.com" target="_blank" rel="noopener" class="fade-up card-h flex items-center gap-4 bg-white p-5 rounded-2xl border border-gray-100 group">
-                <div class="w-12 h-12 bg-red-600 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-                </div>
-                <div><div class="font-poppins font-semibold text-navy text-sm">YouTube</div><div class="text-gray-400 text-xs">Video Tutorial</div></div>
-            </a>
-            <a href="https://medium.com" target="_blank" rel="noopener" class="fade-up card-h flex items-center gap-4 bg-white p-5 rounded-2xl border border-gray-100 group">
-                <div class="w-12 h-12 bg-gray-800 rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/></svg>
-                </div>
-                <div><div class="font-poppins font-semibold text-navy text-sm">Medium</div><div class="text-gray-400 text-xs">Long-form Writing</div></div>
-            </a>
-            <a href="mailto:email@example.com" class="fade-up card-h flex items-center gap-4 bg-white p-5 rounded-2xl border border-gray-100 group">
-                <div class="w-12 h-12 bg-amber rounded-xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                </div>
-                <div><div class="font-poppins font-semibold text-navy text-sm">Email</div><div class="text-gray-400 text-xs">Hubungi Langsung</div></div>
-            </a>
-        </div>
-    </div>
-</section>
+  <!-- Toast Container -->
+  <div id="toast-container" aria-live="polite"></div>
 
-<!-- ═══════════ GUIDE ═══════════ -->
-<section id="guide" class="py-24 bg-white">
-    <div class="max-w-6xl mx-auto px-6">
-        <div class="fade-up text-center mb-16">
-            <span class="text-amber font-semibold text-xs uppercase tracking-[0.2em]">Referensi</span>
-            <h2 class="font-poppins text-3xl md:text-4xl font-bold text-navy mt-3">Guide Markdown</h2>
-            <div class="w-16 h-1 bg-amber mx-auto mt-4 rounded-full"></div>
-            <p class="text-gray-500 mt-4 max-w-xl mx-auto">Gunakan sintaks Markdown di kolom <strong class="text-navy">KontenMarkdown</strong> pada Google Spreadsheet untuk memformat artikel Anda.</p>
-        </div>
-        <div class="fade-up max-w-3xl mx-auto">
-            <div class="bg-offwhite rounded-2xl overflow-hidden border border-gray-100">
-                <div class="bg-navy px-6 py-4 flex items-center gap-3">
-                    <div class="flex gap-1.5">
-                        <div class="w-3 h-3 rounded-full bg-red-400"></div>
-                        <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
-                        <div class="w-3 h-3 rounded-full bg-green-400"></div>
-                    </div>
-                    <span class="text-white/60 text-xs font-medium">Markdown Reference</span>
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-sm">
-                        <thead>
-                            <tr class="border-b border-gray-200">
-                                <th class="text-left px-6 py-3.5 font-poppins font-semibold text-navy text-xs uppercase tracking-wider">Elemen</th>
-                                <th class="text-left px-6 py-3.5 font-poppins font-semibold text-navy text-xs uppercase tracking-wider">Sintaks Markdown</th>
-                                <th class="text-left px-6 py-3.5 font-poppins font-semibold text-navy text-xs uppercase tracking-wider">Hasil</th>
-                            </tr>
-                        </thead>
-                        <tbody class="text-gray-600">
-                            <tr class="border-b border-gray-100 hover:bg-white transition-colors">
-                                <td class="px-6 py-3.5 font-medium text-navy">Heading</td>
-                                <td class="px-6 py-3.5"><code class="bg-navy/10 text-navy px-2 py-0.5 rounded text-xs"># Judul</code></td>
-                                <td class="px-6 py-3.5 font-bold text-lg">Judul</td>
-                            </tr>
-                            <tr class="border-b border-gray-100 hover:bg-white transition-colors">
-                                <td class="px-6 py-3.5 font-medium text-navy">Bold</td>
-                                <td class="px-6 py-3.5"><code class="bg-navy/10 text-navy px-2 py-0.5 rounded text-xs">**teks tebal**</code></td>
-                                <td class="px-6 py-3.5"><strong>teks tebal</strong></td>
-                            </tr>
-                            <tr class="border-b border-gray-100 hover:bg-white transition-colors">
-                                <td class="px-6 py-3.5 font-medium text-navy">Italic</td>
-                                <td class="px-6 py-3.5"><code class="bg-navy/10 text-navy px-2 py-0.5 rounded text-xs">*teks miring*</code></td>
-                                <td class="px-6 py-3.5"><em>teks miring</em></td>
-                            </tr>
-                            <tr class="border-b border-gray-100 hover:bg-white transition-colors">
-                                <td class="px-6 py-3.5 font-medium text-navy">Link</td>
-                                <td class="px-6 py-3.5"><code class="bg-navy/10 text-navy px-2 py-0.5 rounded text-xs">[teks](url)</code></td>
-                                <td class="px-6 py-3.5"><a href="#" class="text-amber underline" onclick="event.preventDefault()">teks</a></td>
-                            </tr>
-                            <tr class="border-b border-gray-100 hover:bg-white transition-colors">
-                                <td class="px-6 py-3.5 font-medium text-navy">Image</td>
-                                <td class="px-6 py-3.5"><code class="bg-navy/10 text-navy px-2 py-0.5 rounded text-xs">![alt](url)</code></td>
-                                <td class="px-6 py-3.5 text-gray-400 text-xs">🖼️ Gambar tampil di artikel</td>
-                            </tr>
-                            <tr class="hover:bg-white transition-colors">
-                                <td class="px-6 py-3.5 font-medium text-navy">Code</td>
-                                <td class="px-6 py-3.5"><code class="bg-navy/10 text-navy px-2 py-0.5 rounded text-xs">`kode`</code></td>
-                                <td class="px-6 py-3.5"><code class="bg-navy/10 text-navy px-1.5 py-0.5 rounded text-xs">kode</code></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+  <!-- ========== JAVASCRIPT ========== -->
+  <script>
+    // ============================================
+    // KONFIGURASI GOOGLE SHEET
+    // Ganti SHEET_ID_ANDA dengan ID spreadsheet Anda
+    // Cara: Buka Google Sheet > File > Bagikan > Publikasikan ke web
+    //       Salin ID dari URL: docs.google.com/spreadsheets/d/SHEET_ID_ANDA/edit
+    // ============================================
+    const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/SHEET_ID_ANDA/export?format=csv&gid=0';
 
-            <!-- Spreadsheet structure guide -->
-            <div class="mt-8 bg-amber-50 border border-amber-200 rounded-2xl p-6">
-                <div class="flex items-start gap-3">
-                    <div class="w-8 h-8 bg-amber-200 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
-                        <svg class="w-4 h-4 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    </div>
-                    <div>
-                        <h4 class="font-poppins font-semibold text-navy text-sm mb-2">Struktur Google Spreadsheet</h4>
-                        <p class="text-gray-600 text-sm leading-relaxed mb-3">Buat spreadsheet dengan header kolom berikut (baris pertama):</p>
-                        <div class="bg-white rounded-xl p-4 overflow-x-auto">
-                            <table class="w-full text-xs">
-                                <thead><tr>
-                                    <th class="text-left px-3 py-2 bg-navy text-white rounded-tl-lg font-semibold">Judul</th>
-                                    <th class="text-left px-3 py-2 bg-navy text-white font-semibold">Tanggal</th>
-                                    <th class="text-left px-3 py-2 bg-navy text-white font-semibold">Kategori</th>
-                                    <th class="text-left px-3 py-2 bg-navy text-white rounded-tr-lg font-semibold">KontenMarkdown</th>
-                                </tr></thead>
-                                <tbody class="text-gray-600"><tr class="border-b border-gray-100">
-                                    <td class="px-3 py-2 font-medium">Belajar JAMstack</td>
-                                    <td class="px-3 py-2">2024-01-15</td>
-                                    <td class="px-3 py-2">Tutorial</td>
-                                    <td class="px-3 py-2 text-amber font-mono"># JAMstack… **
+    // ============================================
+    // UTILITAS: Toast Notification
+    // ============================================
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+      toast.textContent = message;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(100%)';
+        toast.style.transition = 'all 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
+
+    // ============================================
+    // UTILITAS: CSV Parser (menangani kutip dan koma)
+    // ============================================
+    function parseCSV(text) {
+      const rows = [];
+      let current = '';
+      let inQuotes = false;
+      let row = [];
+
+      for (let i = 0; i < text.length; i++) {
+        const char = text[i];
+        if (inQuotes) {
+          if (char === '"') {
+            // Kutip ganda = escaped quote
+            if (text[i + 1] === '"') {
+              current += '"';
+              i++;
+            } else {
+              inQuotes = false;
+            }
+          } else {
+            current += char;
+          }
+        } else {
+          if (char === '"') {
+            inQuotes = true;
+          } else if (char === ',') {
+            row.push(current.trim());
+            current = '';
+          } else if (char === '\n' || (char === '\r' && text[i + 1] === '\n')) {
+            row.push(current.trim());
+            current = '';
+            if (row.length > 0 && row.some(c => c !== '')) rows.push(row);
+            row = [];
+            if (char === '\r') i++;
+          } else {
+            current += char;
+          }
+        }
+      }
+      // Baris terakhir
+      if (current || row.length > 0) {
+        row.push(current.trim());
+        if (row.some(c => c !== '')) rows.push(row);
+      }
+      return rows;
+    }
+
+    // Konversi CSV menjadi array objek
+    function csvToObjects(csvText) {
+      const rows = parseCSV(csvText);
+      if (rows.length < 2) return [];
+      const headers = rows[0];
+      return rows.slice(1).map(row => {
+        const obj = {};
+        headers.forEach((header, i) => {
+          obj[header] = row[i] || '';
+        });
+        return obj;
+      });
+    }
+
+    // Render Markdown ke HTML dengan fallback
+    function renderMarkdown(md) {
+      if (typeof marked !== 'undefined' && marked.parse) {
+        return marked.parse(md);
+      }
+      // Fallback sederhana
+      return md.replace(/\n/g, '<br>');
+    }
+
+    // ============================================
+    // SCROLL PROGRESS BAR
+    // ============================================
+    function initScrollProgress() {
+      const bar = document.getElementById('scroll-progress');
+      window.addEventListener('scroll', () => {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const percent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+        bar.style.width = percent + '%';
+      }, { passive: true });
+    }
+
+    // ============================================
+    // NAVIGASI: Scroll detection & active link
+    // ============================================
+    function initNavigation() {
+      const navbar = document.getElementById('navbar');
+      const navLinks = document.querySelectorAll('.nav-link');
+      const sections = document.querySelectorAll('main > section');
+      const menuToggle = document.getElementById('menu-toggle');
+      const navMenu = document.getElementById('nav-menu');
+
+      // Navbar berubah saat scroll
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 60) {
+          navbar.classList.add('scrolled');
+        } else {
+          navbar.classList.remove('scrolled');
+        }
+      }, { passive: true });
+
+      // Active link berdasarkan section yang terlihat
+      const sectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const id = entry.target.getAttribute('id');
+            navLinks.forEach(link => {
+              link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+            });
+          }
+        });
+      }, { threshold: 0.3, rootMargin: '-80px 0px -40% 0px' });
+
+      sections.forEach(sec => sectionObserver.observe(sec));
+
+      // Mobile menu toggle
+      menuToggle.addEventListener('click', () => {
+        menuToggle.classList.toggle('open');
+        navMenu.classList.toggle('open');
+      });
+
+      // Tutup menu saat link diklik
+      navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+          menuToggle.classList.remove('open');
+          navMenu.classList.remove('open');
+        });
+      });
+    }
+
+    // ============================================
+    // SCROLL REVEAL (IntersectionObserver)
+    // ============================================
+    function initScrollReveal() {
+      const reveals = document.querySelectorAll('.reveal');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+      reveals.forEach(el => observer.observe(el));
+    }
+
+    // ============================================
+    // ARTIKEL: Fetch dari Google Sheet CSV
+    // ============================================
+    async function loadArticles() {
+      const container = document.getElementById('posts-container');
+
+      // Tampilkan skeleton loading
+      container.innerHTML = `
+        <div class="article-card">
+          <div class="skeleton h-6 w-3/4 mb-3"></div>
+          <div class="skeleton h-4 w-1/4 mb-4"></div>
+          <div class="skeleton h-4 w-full mb-2"></div>
+          <div class="skeleton h-4 w-5/6 mb-2"></div>
+          <div class="skeleton h-4 w-2/3"></div>
+        </div>
+        <div class="article-card">
+          <div class="skeleton h-6 w-2/3 mb-3"></div>
+          <div class="skeleton h-4 w-1/5 mb-4"></div>
+          <div class="skeleton h-4 w-full mb-2"></div>
+          <div class="skeleton h-4 w-4/5"></div>
+        </div>
+      `;
+
+      // Cek apakah URL sudah dikonfigurasi
+      if (GOOGLE_SHEET_CSV_URL.includes('SHEET_ID_ANDA')) {
+        // Tampilkan demo data jika belum dikonfigurasi
+        renderDemoArticles(container);
+        showToast('Google Sheet belum dikonfigurasi. Menampilkan artikel demo.', 'info');
+        return;
+      }
+
+      try {
+        const response = await fetch(GOOGLE_SHEET_CSV_URL);
+        if (!response.ok) throw new Error('Gagal mengambil data: ' + response.status);
+
+        const csvText = await response.text();
+        const articles = csvToObjects(csvText);
+
+        if (articles.length === 0) {
+          container.innerHTML = `
+            <div class="text-center py-12 text-slate-500">
+              <i class="fas fa-inbox text-4xl mb-4 text-slate-300"></i>
+              <p>Belum ada artikel. Tambahkan data ke Google Sheet Anda.</p>
+            </div>`;
+          return;
+        }
+
+        container.innerHTML = '';
+        articles.forEach((article, index) => {
+          const judul = article.Judul || article.judul || 'Tanpa Judul';
+          const tanggal = article.Tanggal || article.tanggal || '';
+          const kategori = article.Kategori || article.kategori || '';
+          const konten = article.KontenMarkdown || article.kontenmarkdown || article.konten_markdown || '';
+
+          if (!judul && !konten) return; // Lewati baris kosong
+
+          const card = document.createElement('article');
+          card.className = 'article-card reveal';
+          card.style.transitionDelay = (index * 0.1) + 's';
+
+          let headerHTML = '';
+          if (judul) headerHTML += `<h3>${escapeHTML(judul)}</h3>`;
+          if (tanggal) headerHTML += `<span class="article-date"><i class="far fa-calendar-alt mr-1"></i>${escapeHTML(tanggal)}</span>`;
+          if (kategori) headerHTML += ` <span class="text-xs bg-navy/10 text-navy px-2.5 py-1 rounded-full font-medium ml-2">${escapeHTML(kategori)}</span>`;
+
+          let bodyHTML = '';
+          if (konten) {
+            bodyHTML = `<div class="article-body">${renderMarkdown(konten)}</div>`;
+          }
+
+          card.innerHTML = headerHTML + bodyHTML;
+          container.appendChild(card);
+        });
+
+        // Re-observe elemen baru untuk scroll reveal
+        initScrollReveal();
+        showToast(`${articles.length} artikel berhasil dimuat dari Google Sheet.`, 'success');
+
+      } catch (error) {
+        console.error('Error fetching Google Sheet:', error);
+        renderDemoArticles(container);
+        showToast('Gagal memuat data dari Google Sheet. Menampilkan artikel demo.', 'error');
+      }
+    }
+
+    // Escape HTML untuk mencegah XSS pada field non-markdown
+    function escapeHTML(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    // Render artikel demo saat Sheet belum dikonfigurasi
+    function renderDemoArticles(container) {
+      const demoData = [
+        {
+          judul: 'Memulai dengan JAMstack untuk Pendidikan',
+          tanggal: '2024-12-01',
+          kategori: 'Tutorial',
+          konten: '**JAMstack** adalah pendekatan modern untuk membangun web yang cepat dan aman. Dengan menggabungkan *JavaScript*, *API*, dan *Markup*, kita bisa membuat situs yang ringan namun powerful.\n\nKunjungi [jamstack.org](https://jamstack.org) untuk mempelajari lebih lanjut.'
+        },
+        {
+          judul: 'Menulis Markdown di Google Sheets',
+          tanggal: '2024-11-28',
+          kategori: 'Tips',
+          konten: 'Anda bisa menulis konten dalam format **Markdown** langsung di sel Google Spreadsheet. Gunakan kolom `KontenMarkdown` untuk menulis artikel Anda.\n\nContoh sintaks yang didukung:\n- `**tebal**` untuk **tebal**\n- `*miring*` untuk *miring*\n- `[link](url)` untuk link'
+        },
+        {
+          judul: 'Mengoptimalkan Gambar untuk Web',
+          tanggal: '2024-11-20',
+          kategori: 'Performa',
+          konten: 'Gambar yang tidak dioptimalkan adalah penyebab utama website lambat. Gunakan format modern seperti **WebP** dan kompresi lossless.\n\n![Contoh gambar](https://picsum.photos/seed/demo123/800/300)'
+        }
+      ];
+
+      container.innerHTML = '';
+      demoData.forEach((article, index) => {
+        const card = document.createElement('article');
+        card.className = 'article-card reveal';
+        card.style.transitionDelay = (index * 0.1) + 's';
+
+        card.innerHTML = `
+          <h3>${escapeHTML(article.judul)}</h3>
+          <span class="article-date"><i class="far fa-calendar-alt mr-1"></i>${escapeHTML(article.tanggal)}</span>
+          <span class="text-xs bg-navy/10 text-navy px-2.5 py-1 rounded-full font-medium ml-2">${escapeHTML(article.kategori)}</span>
+          <div class="article-body">${renderMarkdown(article.konten)}</div>
+        `;
+        container.appendChild(card);
+      });
+
+      // Re-observe untuk scroll reveal
+      initScrollReveal();
+    }
+
+    // ============================================
+    // INISIALISASI
+    // ============================================
+    document.addEventListener('DOMContentLoaded', () => {
+      initScrollProgress();
+      initNavigation();
+      initScrollReveal();
+      loadArticles();
+
+      // ============================================
+      // PWA: Register Service Worker
+      // ============================================
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then(registration => {
+              console.log('ServiceWorker terdaftar dengan scope:', registration.scope);
+            })
+            .catch(error => {
+              console.log('ServiceWorker gagal didaftarkan:', error);
+            });
+        });
+      }
+    });
+  </script>
+
+</body>
+</html>
